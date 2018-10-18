@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cm.dao.LineDao">
+
+    <insert id="add">
+        insert into t_line (lineString,type,uid) values (#{lineString},#{type},#{uid})
+    </insert>
+
+    <update id="update">
+        update t_line
+        <set>
+            <if test="null!=lineString">
+                lineString=#{lineString},
+            </if>
+            <if test="uid!=null">
+                uid=#{uid},
+            </if>
+            type=#{type}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <select id="getAll" resultType="com.cm.entity.Line">
+        select * from t_line
+    </select>
+
+    <delete id="delete">
+        delete from t_line where id=#{id}
+    </delete>
+
+    <select id="getByType" resultType="com.cm.entity.Line">
+        select * from t_line where type=#{type}
+    </select>
+
+    <select id="getAllSensorUid" resultType="com.cm.entity.Sensor">
+        SELECT t1.uid,t2.ipaddr,t1.sensorId,t1.sensor_type
+        from t_sensor t1
+        LEFT JOIN t_substation t2 on t1.station = t2.id
+        WHERE t1.control &lt; 3
+        union
+        SELECT t1.uid,t2.ipaddr,t1.sensorId,t1.sensor_type
+        from t_switch_sensor t1
+        LEFT JOIN t_substation t2 on t1.station=t2.id
+        where t1.control &lt; 3
+    </select>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.dao.ClassesDao">
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.cm.entity.Classes">
+		insert into t_classes (week,dayrange,status) values (#{week},#{dayrange},#{status})
+	</insert>
+	
+	<select id="getAll" resultType="com.cm.entity.Classes">
+		select * from t_classes where status=1
+	</select>
+	
+	<update id="delete">
+		update t_classes
+		<set>
+			status=3
+		</set>
+		<where>
+			id=#{id}
+		</where>
+	</update>
+
+    <update id="update">
+        update t_classes
+        <set>
+            <if test="null != week">
+                week=#{week},
+            </if>
+            <if test="null!=dayrang">
+                dayrange=#{dayrange},
+            </if>
+            <if test="status>0">
+                status=#{status}
+            </if>
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <select id="getAllEnv" resultType="com.cm.entity.Classes">
+        select * from t_classes where status=2
+    </select>
+
+</mapper>
